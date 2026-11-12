@@ -5,41 +5,55 @@
 const WHATSAPP = "5562999537782";
 
 // Fotos que aparecem deslizando no topo
-const FAIXA = ["buques-12", "buques-01", "buques-18", "arranjos-02", "buques-20", "casamentos-04",
-               "buques-03", "arranjos-18", "pousadas-06", "buques-13", "arranjos-13", "casamentos-09"];
+const FAIXA = ["buques-12", "buques-28", "cestas-01", "buques-01", "buques-27", "casamentos-04",
+               "plantas-05", "buques-18", "pousadas-06", "buques-32", "arranjos-23", "buques-20"];
 
 // Galeria "Buquês e arranjos" — as 12 primeiras aparecem logo; o resto em "Ver mais fotos"
-const BUQUES = ["buques-12", "buques-18", "arranjos-02", "buques-01", "buques-20", "buques-03",
-                "arranjos-18", "buques-13", "buques-07", "arranjos-13", "buques-10", "buques-15",
+const BUQUES = ["buques-12", "buques-28", "buques-18", "buques-27", "arranjos-02", "buques-32",
+                "buques-01", "buques-24", "arranjos-23", "buques-20", "buques-33", "buques-23",
+                "buques-03", "buques-34", "arranjos-18", "buques-29", "buques-13", "buques-22",
+                "arranjos-24", "buques-07", "buques-30", "arranjos-13", "buques-21", "buques-10",
+                "buques-31", "buques-15", "arranjos-25", "buques-25", "buques-26",
                 "buques-02", "buques-04", "buques-05", "buques-06", "buques-08", "buques-09",
                 "buques-11", "buques-14", "buques-16", "buques-17", "buques-19",
                 "arranjos-01", "arranjos-05", "arranjos-06", "arranjos-10", "arranjos-14", "arranjos-17"];
 const BUQUES_VISIVEIS = 12;
 
+// Cestas de presente (fotos reais)
+const CESTAS = ["cestas-01", "cestas-02", "cestas-03"];
+
 // Plantas reais do viveiro (alternam sozinhas no cartão "Ornamentais")
-const ORNAMENTAIS = ["arranjos-08", "arranjos-07", "arranjos-11", "arranjos-21", "arranjos-15",
+const ORNAMENTAIS = ["plantas-05", "plantas-01", "arranjos-08", "plantas-06", "plantas-03", "arranjos-07",
+                     "plantas-02", "plantas-04", "arranjos-11", "plantas-07", "arranjos-21", "arranjos-15",
                      "arranjos-09", "arranjos-22", "arranjos-19", "arranjos-04", "arranjos-12"];
 
 // Casamentos e pousadas (rolagem lateral)
-const EVENTOS = ["casamentos-04", "pousadas-06", "casamentos-03", "pousadas-02", "casamentos-09",
-                 "pousadas-07", "casamentos-02", "pousadas-01", "casamentos-10", "pousadas-04",
-                 "casamentos-06", "pousadas-03", "casamentos-07", "pousadas-08", "casamentos-01",
-                 "pousadas-05", "pousadas-09", "casamentos-08"];
+const EVENTOS = ["casamentos-04", "pousadas-06", "casamentos-11", "pousadas-11", "casamentos-03",
+                 "pousadas-02", "casamentos-12", "pousadas-10", "casamentos-09", "pousadas-07",
+                 "casamentos-02", "pousadas-01", "casamentos-10", "pousadas-04", "casamentos-06",
+                 "pousadas-03", "casamentos-07", "pousadas-08", "casamentos-01", "pousadas-05",
+                 "pousadas-09", "casamentos-08"];
 
 /* ============================================================ */
 
-const LARGAS = new Set(["arranjos-02","arranjos-05","arranjos-07","arranjos-09","arranjos-10","arranjos-12",
-  "arranjos-18","arranjos-19","arranjos-21","buques-01","buques-07","buques-08","buques-10","buques-12",
-  "buques-13","buques-15","buques-18","buques-19","casamentos-03","casamentos-04","casamentos-05",
-  "casamentos-07","casamentos-08","pousadas-01","pousadas-02","pousadas-03","pousadas-04","pousadas-06",
-  "pousadas-07","pousadas-08","pousadas-09"]);
+// Formato das fotos (o padrão é em pé, 3:4). Ao adicionar uma foto fora do padrão, inclua o nome aqui.
+const ALTAS = new Set([
+  "arranjos-01", "arranjos-03", "arranjos-04", "arranjos-06", "arranjos-08", "arranjos-11",
+  "arranjos-13", "arranjos-14", "arranjos-15", "arranjos-16", "arranjos-17", "arranjos-20",
+  "arranjos-22", "arranjos-25", "buques-02", "buques-03", "buques-04", "buques-05", "buques-06",
+  "buques-09", "buques-11", "buques-14", "buques-16", "buques-17", "buques-20", "buques-24",
+  "casamentos-01", "casamentos-02", "casamentos-06", "casamentos-09", "casamentos-10", "cestas-03",
+  "plantas-02", "plantas-07", "pousadas-05"
+]);
+const DEITADAS = new Set(["casamentos-12"]);
 
 const pasta = (nome) => nome.split("-")[0];
 const mini = (nome) => `img/${pasta(nome)}/${nome}-p.webp`;
 const grande = (nome) => `img/${pasta(nome)}/${nome}.webp`;
-const tamanho = (nome) => LARGAS.has(nome) ? [360, 480] : [270, 480];
+const tamanho = (nome) => ALTAS.has(nome) ? [270, 480] : DEITADAS.has(nome) ? [480, 360] : [360, 480];
 const linkWa = (msg) => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
-const DESCRICAO = { buques: "Buquê", arranjos: "Arranjo", casamentos: "Decoração de casamento", pousadas: "Decoração em pousada" };
+const DESCRICAO = { buques: "Buquê", arranjos: "Arranjo", cestas: "Cesta de presente", plantas: "Planta",
+                    casamentos: "Decoração de casamento", pousadas: "Decoração em pousada" };
 
 function criarImg(nome, alt, carregarDepois = true) {
   const img = document.createElement("img");
@@ -79,7 +93,7 @@ function mostrar(i) {
   imgGrande.alt = `${tipo} feito pela Cecília Flores`;
   codigo.textContent = `${tipo} · ref. ${ref}`;
   const ehEvento = ["casamentos", "pousadas"].includes(pasta(nome));
-  botaoWa.textContent = ehEvento ? "Pedir orçamento" : "Quero um assim";
+  botaoWa.textContent = ehEvento ? "Pedir orçamento" : pasta(nome) === "cestas" ? "Quero uma assim" : "Quero um assim";
   botaoWa.href = linkWa(`Olá, Wilma! Vi no site a foto ${ref} (${tipo.toLowerCase()}) e gostaria de algo parecido.`);
 }
 function abrir(lista, i) {
@@ -126,6 +140,7 @@ verMais.onclick = () => {
   verMais.remove();
 };
 montarGaleria(document.getElementById("galeria-eventos"), EVENTOS);
+montarGaleria(document.getElementById("galeria-cestas"), CESTAS);
 
 /* ---------- Ornamentais: fotos alternando suavemente ---------- */
 const orn = document.getElementById("fotos-ornamentais");
